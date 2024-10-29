@@ -31,13 +31,17 @@ func Execute() {
 	}
 }
 
+var LaTeXDir string
+var MDXDir string
+var BibliographyPath string
+
 func init() {
-	rootCmd.PersistentFlags().String("texDir", "tex", "LaTeX notes directory")
-	rootCmd.PersistentFlags().String("mdxDir", "mdx", "MDX notes directory")
+	rootCmd.PersistentFlags().StringVar(&LaTeXDir, "texDir", "PATH TO LATEX NOTES", "LaTeX note directory")
+	rootCmd.PersistentFlags().StringVar(&MDXDir, "mdxDir", "PATH TO MDX NOTES", "MDX note directory")
+	rootCmd.PersistentFlags().StringVar(&BibliographyPath, "bibliographyPath", "bibliography.bib", "Bibliography path")
 	cobra.CheckErr(viper.BindPFlag("texDir", rootCmd.PersistentFlags().Lookup("texDir")))
 	cobra.CheckErr(viper.BindPFlag("mdxDir", rootCmd.PersistentFlags().Lookup("mdxDir")))
-	viper.SetDefault("texDir", "PATH TO BASE LATEX NOTES DIRECTORY")
-	viper.SetDefault("mdxDir", "PATH TO BASE MDX NOTES DIRECTORY")
+	cobra.CheckErr(viper.BindPFlag("bibliographyPath", rootCmd.PersistentFlags().Lookup("bibliographyPath")))
 
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
@@ -57,4 +61,8 @@ func init() {
 			panic(fmt.Errorf("fatal error config file: %w", err))
 		}
 	}
+
+	LaTeXDir = viper.GetString("texDir")
+	MDXDir = viper.GetString("mdxDir")
+	BibliographyPath = viper.GetString("bibliographyPath")
 }
