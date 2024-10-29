@@ -13,7 +13,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "notes",
+	Use:   "notes-cli [command] [flags]",
 	Short: "A CLI to manage notes.",
 	Long: `A CLI for managing notes.
 
