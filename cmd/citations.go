@@ -74,7 +74,6 @@ func parseBibliography(coursePath string) bibliography {
 var citationMatch = regexp.MustCompile(`\\cite\{(.*?)\}`)
 
 func convertCitationsToFootnotes(bib bibliography, content string) string {
-
 	citations := citationMatch.FindAllString(content, -1)
 	var citationContent []string
 	var citationContentItem string
