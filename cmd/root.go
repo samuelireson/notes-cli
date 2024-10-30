@@ -68,5 +68,5 @@ func init() {
 	LaTeXDir = viper.GetString("texDir")
 	MDXDir = viper.GetString("mdxDir")
 	BibliographyPath = viper.GetString("bibliographyPath")
-	PDFDir = viper.GetString("pdfPath")
+	PDFDir = viper.GetString("pdfDir")
 }
