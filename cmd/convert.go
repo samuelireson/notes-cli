@@ -43,6 +43,7 @@ func processFile(texChapterPath string, courseBibliography bibliography) error {
 	content := string(texChapter)
 	content = convertTeXToMDX(content)
 	content = convertCitationsToFootnotes(courseBibliography, content)
+	content = addDownloadLinks(content, texChapterPath)
 	mdxChapter := []byte(content)
 
 	err = os.WriteFile(mdxOutputPath, mdxChapter, 0644)

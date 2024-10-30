@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -88,5 +90,21 @@ func convertTeXToMDX(content string) string {
 	for _, element := range basicRegexPatterns {
 		content = element.captureGroup.ReplaceAllString(content, element.replacement)
 	}
+	return content
+}
+
+func addDownloadLinks(content, texChapterPath string) string {
+
+	chapterDir, texChapterName := filepath.Split(texChapterPath)
+	courseDir := strings.TrimSuffix(chapterDir, "chapters/")
+	chapterName := strings.TrimSuffix(texChapterName, filepath.Ext(texChapterName))
+	baseDownloadPath := filepath.Join(SiteURL, courseDir)
+	chapterDownloadPath := filepath.Join(baseDownloadPath, chapterName+".pdf")
+	courseDownloadPath := filepath.Join(baseDownloadPath, "master.pdf")
+
+	downloadLinkTemplate := fmt.Sprintf("<div style='display: flex; justify-content: space-around;'>\n\t<LinkButton target=\"_blank\" href=\"%s\" variant=\"secondary\" icon=\"document\" >Download</LinkButton>\n\t<LinkButton target=\"_blank\" href=\"%s\" variant=\"primary\" icon=\"open-book\" >Download</LinkButton>\n</div>", chapterDownloadPath, courseDownloadPath)
+
+	content = strings.Replace(content, "\n\n", "\n\n"+downloadLinkTemplate, 1)
+
 	return content
 }
