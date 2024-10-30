@@ -9,7 +9,9 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cobra"
 )
 
@@ -81,9 +83,54 @@ var convertCmd = &cobra.Command{
 		coursePath := args[0]
 		courseBibliography := parseBibliography(coursePath)
 		processDirectory(coursePath, courseBibliography)
+
+		chapterPath := filepath.Join(coursePath, "chapters")
+		if continuous {
+			watcher, err := fsnotify.NewWatcher()
+			if err != nil {
+				log.Fatal(err)
+			} else {
+				log.Printf("Watching for changes to %s\n", chapterPath)
+			}
+			defer watcher.Close()
+
+			done := make(chan bool)
+			timers := make(map[string]*time.Timer)
+
+			go func() {
+				for {
+					select {
+					case event := <-watcher.Events:
+						if event.Op&fsnotify.Write == fsnotify.Write {
+							if timer, exists := timers[event.Name]; exists {
+								timer.Stop()
+							}
+
+							timers[event.Name] = time.AfterFunc(1*time.Second, func() {
+								log.Println("Files changed, re-converting")
+								processDirectory(coursePath, courseBibliography)
+								delete(timers, event.Name)
+							})
+						}
+					case err := <-watcher.Errors:
+						log.Fatal(err)
+					}
+				}
+			}()
+
+			err = watcher.Add(chapterPath)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			<-done
+		}
 	},
 }
 
+var continuous bool
+
 func init() {
 	rootCmd.AddCommand(convertCmd)
+	convertCmd.Flags().BoolVarP(&continuous, "continuous", "c", false, "Watch and continuously convert")
 }
