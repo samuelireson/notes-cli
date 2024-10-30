@@ -98,7 +98,7 @@ func addDownloadLinks(content, texChapterPath string) string {
 	chapterDir, texChapterName := filepath.Split(texChapterPath)
 	courseDir := strings.TrimSuffix(chapterDir, "chapters/")
 	chapterName := strings.TrimSuffix(texChapterName, filepath.Ext(texChapterName))
-	baseDownloadPath := filepath.Join(SiteURL, courseDir)
+	baseDownloadPath := "/" + courseDir
 	chapterDownloadPath := filepath.Join(baseDownloadPath, chapterName+".pdf")
 	courseDownloadPath := filepath.Join(baseDownloadPath, "master.pdf")
 
