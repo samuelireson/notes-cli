@@ -38,6 +38,9 @@ var basicRegexPatterns = []regexPattern{
 	// fonts and ligatures
 	{regexp.MustCompile(`\\textbf\{(.*?)\}`), "<b> $1 </b>"},
 	{regexp.MustCompile(`\\textit\{(.*?)\}`), "<em> $1 </em>"},
+
+	// definitions - later extract to chapterwise index.
+	{regexp.MustCompile(`\\defined\{(.*?)\}`), "<em> $1 </em>"},
 }
 
 var stringPatterns = []stringPattern{
