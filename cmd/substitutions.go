@@ -33,6 +33,15 @@ var basicRegexPatterns = []regexPattern{
 	{regexp.MustCompile(`\\subsection\{(.*?)\}`), "### $1"},
 
 	// theorem environments
+	{regexp.MustCompile(`\\begin\{corollary\}(\[.*?\])?`), "<Aside type='result' title='Corollary' name='$1'>"},
+	{regexp.MustCompile(`\\begin\{definition\}(\[.*?\])?`), "<Aside type='definition' title='Definition' name='$1'>"},
+	{regexp.MustCompile(`\\begin\{example\}(\[.*?\])?`), "<Aside type='example' title='Example' name='$1'>"},
+	{regexp.MustCompile(`\\begin\{lemma\}(\[.*?\])?`), "<Aside type='result' title='Lemma' name='$1'>"},
+	{regexp.MustCompile(`\\begin\{nonexample\}(\[.*?\])?`), "<Aside type='example' title='Non-example' name='$1'>"},
+	{regexp.MustCompile(`\\begin\{notation\}(\[.*?\])?`), "<Aside type='comment' title='Notation' name='$1'>"},
+	{regexp.MustCompile(`\\begin\{proposition\}(\[.*?\])?`), "<Aside type='result' title='Proposition' name='$1'>"},
+	{regexp.MustCompile(`\\begin\{remark\}(\[.*?\])?`), "<Aside type='comment' title='Remark' name='$1'>"},
+	{regexp.MustCompile(`\\begin\{theorem\}(\[.*?\])?`), "<Aside type='result' title='Theorem' name='$1'>"},
 	{regexp.MustCompile(`\\end\{(definition|theorem|lemma|proposition|corollary|example|nonexample|notation|remark)\}`), "</Aside>"},
 
 	// fonts and ligatures
@@ -60,20 +69,9 @@ var stringPatterns = []stringPattern{
 	{"\\end{problem}", "</TabItem>"},
 	{"\\end{solution}", "</TabItem>"},
 
-	// theorem environments
-	{"\\begin{corollary}", "<Aside type='result' title='Corollary' >"},
-	{"\\begin{definition}", "<Aside type='definition' title='Definition' >"},
-	{"\\begin{example}", "<Aside type='example' title='Example' >"},
-	{"\\begin{lemma}", "<Aside type='result' title='Lemma' >"},
-	{"\\begin{nonexample}", "<Aside type='example' title='Nonexample' >"},
-	{"\\begin{notation}", "<Aside type='comment' title='Notation' >"},
-	{"\\begin{proposition}", "<Aside type='result' title='Proposition' >"},
-	{"\\begin{remark}", "<Aside type='comment' title='Remark' >"},
-	{"\\begin{theorem}", "<Aside type='result' title='Theorem' >"},
-
 	// badges
 	{"\\basic", ":badge[Basic]{variant=success}"},
-	{"\\intermediate", ":badge[Intermediate]{variant=warning}"},
+	{"\\intermediate", ":badge[Intermediate]{variant=caution}"},
 	{"\\challenging", ":badge[Challenging]{variant=danger}"},
 
 	// unordered lists
