@@ -31,6 +31,7 @@ var basicRegexPatterns = []regexPattern{
 	{regexp.MustCompile(`\\chapter\{(.*?)\}`), header},
 	{regexp.MustCompile(`\\section\{(.*?)\}`), "## $1"},
 	{regexp.MustCompile(`\\subsection\{(.*?)\}`), "### $1"},
+	{regexp.MustCompile(`\\chapterauthor\{.*?\}`), ""},
 
 	// theorem environments
 	{regexp.MustCompile(`\\begin\{corollary\}(\[.*?\])?`), "<Aside type='result' title='Corollary' name='$1'>"},
@@ -50,12 +51,18 @@ var basicRegexPatterns = []regexPattern{
 
 	// definitions - later extract to chapterwise index.
 	{regexp.MustCompile(`\\defined\{(.*?)\}`), "<em> $1 </em>"},
+
+	// figure fluff
+	{regexp.MustCompile(`\\(begin|end)\{figure\}(\[!htb\])?`), ""},
+	{regexp.MustCompile(`\s*?\\centering`), ""},
+	{regexp.MustCompile(`\s*?\\caption\{(.*?)\}`), "\n<div style='width: 80%; font-style: italic; margin-inline: auto;'>Caption: $1 </div>"},
+	{regexp.MustCompile(`\\includegraphics\{(.*?)/figure\.pdf\}`), "![$1](../figures/$1.svg)"},
 }
 
 var stringPatterns = []stringPattern{
 	//document organisation
-	{"\\begin{chout}", "<div style='text-align: center'><em>"},
-	{"\\end{chout}", "</em></div>"},
+	{"\\begin{chout}", "<div style='text-align: center; font-style: italic;'>"},
+	{"\\end{chout}", "</div>"},
 
 	// maths environments
 	{"\\begin{align*}", "$$\n\\begin{align*}"},

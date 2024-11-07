@@ -78,6 +78,10 @@ func convertCitationsToFootnotes(bib bibliography, content string) string {
 	var citationContent []string
 	var citationContentItem string
 
+	if len(citations) == 0 {
+		return content
+	}
+
 	for _, citation := range citations {
 		citation = strings.TrimPrefix(citation, "\\cite{")
 		citation = strings.TrimSuffix(citation, "}")
