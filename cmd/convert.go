@@ -81,6 +81,7 @@ var convertCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		coursePath := args[0]
+		convertFigures(coursePath)
 		courseBibliography := parseBibliography(coursePath)
 		processDirectory(coursePath, courseBibliography)
 
