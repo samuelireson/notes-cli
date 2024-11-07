@@ -57,7 +57,10 @@ func processFile(texChapterPath string, courseBibliography bibliography) error {
 	return nil
 }
 
-func processDirectory(coursePath string, courseBibliography bibliography) {
+func processDirectory(coursePath string) {
+	convertFigures(coursePath)
+	courseBibliography := parseBibliography(coursePath)
+
 	chaptersPath := filepath.Join(coursePath, "chapters")
 	chapters, err := os.ReadDir(chaptersPath)
 	if err != nil {
@@ -81,9 +84,7 @@ var convertCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		coursePath := args[0]
-		convertFigures(coursePath)
-		courseBibliography := parseBibliography(coursePath)
-		processDirectory(coursePath, courseBibliography)
+		processDirectory(coursePath)
 
 		chapterPath := filepath.Join(coursePath, "chapters")
 		if continuous {
