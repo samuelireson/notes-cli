@@ -17,14 +17,13 @@ type stringPattern struct {
 	new string
 }
 
-var header = fmt.Sprintf(`---
+var header = `---
 title: $1
 ---
-import Aside from '%s';
-import Comments from '@components/Comments/Comments.tsx';
+import Aside from '@components/Aside.astro';
 import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
 
-`, AsidePath)
+`
 
 var basicRegexPatterns = []regexPattern{
 	// document organisation

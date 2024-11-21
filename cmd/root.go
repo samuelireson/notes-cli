@@ -39,13 +39,11 @@ var PDFDir string
 var SiteURL string
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&AsidePath, "asidePath", "ASIDE PATH", "Path to Aside definition")
-	rootCmd.PersistentFlags().StringVar(&BibliographyPath, "BIBLIOGRAPHY PATH", "bibliography.bib", "Bibliography path")
+	rootCmd.PersistentFlags().StringVar(&BibliographyPath, "bibliographyPath", "bibliography.bib", "Bibliography path")
 	rootCmd.PersistentFlags().StringVar(&LaTeXDir, "texDir", "PATH TO LATEX NOTES", "LaTeX note directory")
 	rootCmd.PersistentFlags().StringVar(&MDXDir, "mdxDir", "PATH TO MDX NOTES", "MDX note directory")
 	rootCmd.PersistentFlags().StringVar(&PDFDir, "pdfDir", "PATH TO PDF DIRECTORY", "Path for pdf output")
 	rootCmd.PersistentFlags().StringVar(&SiteURL, "siteUrl", "SITE URL", "Url for public website")
-	cobra.CheckErr(viper.BindPFlag("asidePath", rootCmd.PersistentFlags().Lookup("asidePath")))
 	cobra.CheckErr(viper.BindPFlag("bibliographyPath", rootCmd.PersistentFlags().Lookup("bibliographyPath")))
 	cobra.CheckErr(viper.BindPFlag("mdxDir", rootCmd.PersistentFlags().Lookup("mdxDir")))
 	cobra.CheckErr(viper.BindPFlag("pdfDir", rootCmd.PersistentFlags().Lookup("pdfDir")))
@@ -71,7 +69,6 @@ func init() {
 		}
 	}
 
-	AsidePath = viper.GetString("asidePath")
 	BibliographyPath = viper.GetString("bibliographyPath")
 	LaTeXDir = viper.GetString("texDir")
 	MDXDir = viper.GetString("mdxDir")
