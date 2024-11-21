@@ -31,23 +31,26 @@ func Execute() {
 	}
 }
 
+var AsidePath string
+var BibliographyPath string
 var LaTeXDir string
 var MDXDir string
-var BibliographyPath string
 var PDFDir string
 var SiteURL string
 
 func init() {
+	rootCmd.PersistentFlags().StringVar(&AsidePath, "asidePath", "ASIDE PATH", "Path to Aside definition")
+	rootCmd.PersistentFlags().StringVar(&BibliographyPath, "BIBLIOGRAPHY PATH", "bibliography.bib", "Bibliography path")
 	rootCmd.PersistentFlags().StringVar(&LaTeXDir, "texDir", "PATH TO LATEX NOTES", "LaTeX note directory")
 	rootCmd.PersistentFlags().StringVar(&MDXDir, "mdxDir", "PATH TO MDX NOTES", "MDX note directory")
-	rootCmd.PersistentFlags().StringVar(&BibliographyPath, "bibliographyPath", "bibliography.bib", "Bibliography path")
 	rootCmd.PersistentFlags().StringVar(&PDFDir, "pdfDir", "PATH TO PDF DIRECTORY", "Path for pdf output")
 	rootCmd.PersistentFlags().StringVar(&SiteURL, "siteUrl", "SITE URL", "Url for public website")
-	cobra.CheckErr(viper.BindPFlag("texDir", rootCmd.PersistentFlags().Lookup("texDir")))
-	cobra.CheckErr(viper.BindPFlag("mdxDir", rootCmd.PersistentFlags().Lookup("mdxDir")))
+	cobra.CheckErr(viper.BindPFlag("asidePath", rootCmd.PersistentFlags().Lookup("asidePath")))
 	cobra.CheckErr(viper.BindPFlag("bibliographyPath", rootCmd.PersistentFlags().Lookup("bibliographyPath")))
+	cobra.CheckErr(viper.BindPFlag("mdxDir", rootCmd.PersistentFlags().Lookup("mdxDir")))
 	cobra.CheckErr(viper.BindPFlag("pdfDir", rootCmd.PersistentFlags().Lookup("pdfDir")))
 	cobra.CheckErr(viper.BindPFlag("siteUrl", rootCmd.PersistentFlags().Lookup("siteUrl")))
+	cobra.CheckErr(viper.BindPFlag("texDir", rootCmd.PersistentFlags().Lookup("texDir")))
 
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
@@ -68,9 +71,10 @@ func init() {
 		}
 	}
 
+	AsidePath = viper.GetString("asidePath")
+	BibliographyPath = viper.GetString("bibliographyPath")
 	LaTeXDir = viper.GetString("texDir")
 	MDXDir = viper.GetString("mdxDir")
-	BibliographyPath = viper.GetString("bibliographyPath")
 	PDFDir = viper.GetString("pdfDir")
 	SiteURL = viper.GetString("siteUrl")
 }

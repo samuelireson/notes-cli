@@ -17,14 +17,14 @@ type stringPattern struct {
 	new string
 }
 
-var header = `---
+var header = fmt.Sprintf(`---
 title: $1
 ---
-import Aside from '@components/Aside/Aside.tsx';
+import Aside from '%s';
 import Comments from '@components/Comments/Comments.tsx';
 import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
 
-`
+`, AsidePath)
 
 var basicRegexPatterns = []regexPattern{
 	// document organisation
@@ -55,18 +55,18 @@ var basicRegexPatterns = []regexPattern{
 	// figure fluff
 	{regexp.MustCompile(`\\(begin|end)\{figure\}(\[!htb\])?`), ""},
 	{regexp.MustCompile(`\s*?\\centering`), ""},
-	{regexp.MustCompile(`\s*?\\caption\{(.*?)\}`), "\n<div style='width: 80%; font-style: italic; margin-inline: auto;'>Caption: $1 </div>"},
+	{regexp.MustCompile(`\s*?\\caption\{(.*?)\}\n`), "\n<div style='width: 80%; font-style: italic; margin-inline: auto;'>Caption: $1 </div>"},
 	{regexp.MustCompile(`\\includegraphics\{(.*?)/figure\.pdf\}`), "![$1](../figures/$1.svg)"},
+
+	// maths environments
+	{regexp.MustCompile(`\s*?\\begin\{align\*\}`), "\n$$$$\n\\begin{align*}"},
+	{regexp.MustCompile(`\s*?\\end\{align\*\}`), "\n\\end{align*}\n$$$$"},
 }
 
 var stringPatterns = []stringPattern{
 	//document organisation
 	{"\\begin{chout}", "<div style='text-align: center; font-style: italic;'>"},
 	{"\\end{chout}", "</div>"},
-
-	// maths environments
-	{"\\begin{align*}", "$$\n\\begin{align*}"},
-	{"\\end{align*}", "\\end{align*}\n$$"},
 
 	// exercises
 	{"\\begin{exercise}", "<Tabs>"},
@@ -88,6 +88,10 @@ var stringPatterns = []stringPattern{
 
 	// fonts and ligatures
 	{"`", "'"},
+
+	// maths environments
+	// {"\\begin{align*}", "$$\n\\begin{align*}"},
+	// {"\\end{align*}", "\\end{align*}\n$$"},
 }
 
 func convertTeXToMDX(content string) string {

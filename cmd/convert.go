@@ -110,7 +110,7 @@ var convertCmd = &cobra.Command{
 
 							timers[event.Name] = time.AfterFunc(1*time.Second, func() {
 								log.Println("Files changed, re-converting")
-								processDirectory(coursePath, courseBibliography)
+								processDirectory(coursePath)
 								delete(timers, event.Name)
 							})
 						}
