@@ -46,7 +46,10 @@ func convertFigures(coursePath string) {
 	figureDir := filepath.Join(coursePath, "figures")
 
 	figureNames, err := os.ReadDir(figureDir)
-	if err != nil {
+	if err == os.ErrNotExist {
+		log.Print("No figures directory")
+		return
+	} else if err != nil {
 		panic(fmt.Errorf("fatal error reading %s: %w", figureDir, err))
 	}
 
