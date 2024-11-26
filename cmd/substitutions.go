@@ -33,15 +33,15 @@ var basicRegexPatterns = []regexPattern{
 	{regexp.MustCompile(`\\chapterauthor\{.*?\}`), ""},
 
 	// theorem environments
-	{regexp.MustCompile(`\\begin\{corollary\}(\[.*?\])?`), "<Aside type='result' title='Corollary' name='$1'>"},
-	{regexp.MustCompile(`\\begin\{definition\}(\[.*?\])?`), "<Aside type='definition' title='Definition' name='$1'>"},
-	{regexp.MustCompile(`\\begin\{example\}(\[.*?\])?`), "<Aside type='example' title='Example' name='$1'>"},
-	{regexp.MustCompile(`\\begin\{lemma\}(\[.*?\])?`), "<Aside type='result' title='Lemma' name='$1'>"},
-	{regexp.MustCompile(`\\begin\{nonexample\}(\[.*?\])?`), "<Aside type='example' title='Non-example' name='$1'>"},
-	{regexp.MustCompile(`\\begin\{notation\}(\[.*?\])?`), "<Aside type='comment' title='Notation' name='$1'>"},
-	{regexp.MustCompile(`\\begin\{proposition\}(\[.*?\])?`), "<Aside type='result' title='Proposition' name='$1'>"},
-	{regexp.MustCompile(`\\begin\{remark\}(\[.*?\])?`), "<Aside type='comment' title='Remark' name='$1'>"},
-	{regexp.MustCompile(`\\begin\{theorem\}(\[.*?\])?`), "<Aside type='result' title='Theorem' name='$1'>"},
+	{regexp.MustCompile(`\\begin\{corollary\}(\[(.*?)\])?`), "<Aside type='result' title='Corollary' name='$2'>"},
+	{regexp.MustCompile(`\\begin\{definition\}(\[(.*?)\])?`), "<Aside type='definition' title='Definition' name='$2'>"},
+	{regexp.MustCompile(`\\begin\{example\}(\[(.*?)\])?`), "<Aside type='example' title='Example' name='$2'>"},
+	{regexp.MustCompile(`\\begin\{lemma\}(\[(.*?)\])?`), "<Aside type='result' title='Lemma' name='$2'>"},
+	{regexp.MustCompile(`\\begin\{nonexample\}(\[(.*?)\])?`), "<Aside type='example' title='Non-example' name='$2'>"},
+	{regexp.MustCompile(`\\begin\{notation\}(\[(.*?)\])?`), "<Aside type='comment' title='Notation' name='$2'>"},
+	{regexp.MustCompile(`\\begin\{proposition\}(\[(.*?)\])?`), "<Aside type='result' title='Proposition' name='$2'>"},
+	{regexp.MustCompile(`\\begin\{remark\}(\[(.*?)\])?`), "<Aside type='comment' title='Remark' name='$2'>"},
+	{regexp.MustCompile(`\\begin\{theorem\}(\[(.*?)\])?`), "<Aside type='result' title='Theorem' name='$2'>"},
 	{regexp.MustCompile(`\\end\{(definition|theorem|lemma|proposition|corollary|example|nonexample|notation|remark)\}`), "</Aside>"},
 
 	// fonts and ligatures
@@ -58,8 +58,8 @@ var basicRegexPatterns = []regexPattern{
 	{regexp.MustCompile(`\\includegraphics\{(.*?)/figure\.pdf\}`), "![$1](../figures/$1.svg)"},
 
 	// maths environments
-	{regexp.MustCompile(`\s*?\\begin\{align\*\}`), "\n$$$$\n\\begin{align*}"},
-	{regexp.MustCompile(`\s*?\\end\{align\*\}`), "\n\\end{align*}\n$$$$"},
+	{regexp.MustCompile(`\s*?\\begin\{(gather\*|align\*)\}`), "\n$$$$\n\\begin{$1}"},
+	{regexp.MustCompile(`\s*?\\end\{(gather\*|align\*)\}`), "\n\\end{$1}\n$$$$"},
 }
 
 var stringPatterns = []stringPattern{
@@ -85,12 +85,19 @@ var stringPatterns = []stringPattern{
 	{"\\item", "-"},
 	{"\\end{itemize}", ""},
 
+	// ordered lists
+	{"\\begin{enumerate}", ""},
+	{"\\end{enumerate}", ""},
+
 	// fonts and ligatures
 	{"`", "'"},
 
-	// maths environments
-	// {"\\begin{align*}", "$$\n\\begin{align*}"},
-	// {"\\end{align*}", "\\end{align*}\n$$"},
+	// proof
+	{"\\begin{proof}", "<details>\n<summary>Proof</summary>"},
+	{"\\end{proof}", "</details>"},
+
+	// umlauts
+	{"\\\"o", "ö"},
 }
 
 func convertTeXToMDX(content string) string {
